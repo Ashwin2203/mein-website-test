@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Entscheidung</title>
+    <script>
+        let neinClicks = 0;
+
+        function handleChoice(choice) {
+            if (choice === 'yes') {
+                document.getElementById('glück').style.opacity = '1';
+                
+                // Nach 2 Sekunden die Bestätigung einblenden
+                setTimeout(function() {
+                    document.getElementById('bestätigung').style.display = 'block';
+                }, 2000); // 2 Sekunden
+
+                // Nach weiteren 2 Sekunden den Fun-Fact einblenden
+                setTimeout(function() {
+                    document.getElementById('funfact').style.display = 'block';
+                }, 4000); // 4 Sekunden insgesamt (nach Glück + Bestätigung)
+            } else {
+                neinClicks++;
+                if (neinClicks === 1) {
+                    alert('Fehler, bitte versuche es erneut💔.');
+                }
+            }
+        }
+
+        function moveButton(event) {
+            if (neinClicks < 1) return;
+
+            const btn = document.getElementById('neinBtn');
+
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            const rect = btn.getBoundingClientRect();
+
+            const btnX = rect.left + rect.width / 2;
+            const btnY = rect.top + rect.height / 2;
+
+            const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+
+            if (distance < 120) {
+                const x = Math.random() * (window.innerWidth - 100);
+                const y = Math.random() * (window.innerHeight - 50);
+
+                btn.style.position = 'absolute';
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: lightpink;
+            margin: 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        #glück {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: red;
+            background-color: pink;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        #bestätigung {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: rgba(255, 0, 144, 0.533);
+        }
+        #funfact {
+            display: none;
+            margin-top: 20px;
+            font-size: 1em;
+            color: rgba(128, 128, 128, 0.326);
+        }
+    </style>
+</head>
+<body onmousemove="moveButton(event)">
+    <h1>Do you want to get to know me?</h1>
+    <button onclick="handleChoice('yes')">yes☺️</button>
+    <button id="neinBtn" onclick="handleChoice('no')">Nope😓</button>
+    <div id="glück">
+        <h2>Freut mich, dass du Interessiert bist❤️</h2>
+        <p>so you want me❣️</p>
+        <img src="https://officialpsds.com/imageview/rv/3p/rv3p65_large.png?1528770171" alt="Image">
+    </div>
+    <div id="bestätigung">
+        <h3>Okay, bist du sicher? Wenn ja, schick mir ein Herz😘</h3>
+    </div>
+    <div id="funfact">
+        <pstyle="font-size: 0.8em; color: rgba(128, 128, 128, 0.553); margin-top: 20px;">
+        </p>Fun Fact: Das ist mein erstes Mal, dass ich so etwas mache...nicht, dass du denkst, ich schicke das einfach jeder...</p>
+    </div>
+</body>
+</html>
