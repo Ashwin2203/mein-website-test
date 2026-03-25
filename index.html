@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Entscheidung</title>
+
+<style>
+body {
+    background-color: lightpink;
+    margin: 0;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#glück {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: red;
+    background-color: pink;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#bestätigung, #funfact {
+    display: none;
+    margin-top: 20px;
+    color: rgba(233, 57, 189, 0.503);
+}
+
+#funfact {
+    font-size: 0.8em;
+    color: gray;
+}
+
+/* 🎉 CONFETTI */
+.confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: red;
+    top: 0;
+    animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 📱 MOBILE OPTIMIERUNG */
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 1.6em;
+        padding: 10px;
+    }
+
+    button {
+        width: 80%;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    #glück {
+        font-size: 1.2em;
+        padding: 10px;
+    }
+
+    #bestätigung {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    #funfact {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    img {
+        width: 120px;
+    }
+}
+</style>
+
+<script>
+let neinClicks = 0;
+
+function handleChoice(choice) {
+    if (choice === 'yes') {
+        document.getElementById('glück').style.opacity = '1';
+
+        playSound('yesSound');
+        createConfetti();
+
+        setTimeout(() => {
+            document.getElementById('bestätigung').style.display = 'block';
+        }, 2000);
+
+        setTimeout(() => {
+            document.getElementById('funfact').style.display = 'block';
+        }, 4000);
+
+    } else {
+        neinClicks++;
+        playSound('noSound');
+
+        if (neinClicks === 1) {
+            alert('Fehler, bitte versuche es erneut💔.');
+        }
+    }
+}
+
+function moveButton(event) {
+    if (neinClicks < 1) return;
+
+    const btn = document.getElementById('neinBtn');
+    const rect = btn.getBoundingClientRect();
+
+    const distance = Math.hypot(
+        event.clientX - (rect.left + rect.width / 2),
+        event.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (distance < 120) {
+        btn.style.position = 'absolute';
+        btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+        btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+    }
+}
+
+/* 🎉 CONFETTI FUNCTION */
+function createConfetti() {
+    for (let i = 0; i < 80; i++) {
+        let div = document.createElement('div');
+        div.classList.add('confetti-piece');
+
+        div.style.left = Math.random() * 100 + 'vw';
+        div.style.backgroundColor = ['red','blue','yellow','green','pink'][Math.floor(Math.random()*5)];
+        div.style.animationDuration = (Math.random() * 2 + 1) + 's';
+
+        document.body.appendChild(div);
+
+        setTimeout(() => div.remove(), 3000);
+    }
+}
+
+/* 🔊 SOUND */
+function playSound(id) {
+    document.getElementById(id).play();
+}
+</script>
+
+</head>
+
+<body onmousemove="moveButton(event)">
+
+<h1>Do you want to get to know me?</h1>
+
+<button onclick="handleChoice('yes')">yes☺️</button>
+<button id="neinBtn" onclick="handleChoice('no')">Nope😓</button>
+
+<div id="glück">
+    <h2>Freut mich, dass du interessiert bist❤️</h2>
+    <p>so you want me❣️</p>
+    <img src="https://officialpsds.com/imageview/rv/3p/rv3p65_large.png?1528770171" width="150">
+</div>
+
+<div id="bestätigung">
+    <h3>Okay, bist du sicher? Wenn ja, schick mir ein Herz😘</h3>
+</div>
+
+<div id="funfact">
+    Fun Fact: Das ist mein erstes Mal, dass ich so etwas mache...
+</div>
+
+<!-- 🔊 SOUNDS -->
+<audio id="yesSound" src="https://www.soundjay.com/human/yes-1.mp3"></audio>
+<audio id="noSound" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
+
+</body>
+</html>
